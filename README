@@ -1,0 +1,13 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=2437
+
+shymenu will show the menu bar only when the user presses an accelerator 
+key. The menu will be hidden again after an item was selected.
+shymenu achieves this by defining key maps for those accelerator keys 
+(see 'winaltkeys') that would normaly activate a menu.
+
+On a terminal, shymenu will define accelerator keys for the |:emenu| 
+command.
+
+See also:
+http://groups.google.com/group/vim_use/browse_frm/thread/44c870c1e930bcc0
+
