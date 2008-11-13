@@ -3,14 +3,14 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2008-11-12.
-" @Last Change: 2008-11-12.
-" @Revision:    75
-" GetLatestVimScripts: 0 0 shymenu.vim
+" @Last Change: 2008-11-13.
+" @Revision:    95
+" GetLatestVimScripts: 2437 0 shymenu.vim
 
 if &cp || exists("loaded_shymenu")
     finish
 endif
-let loaded_shymenu = 1
+let loaded_shymenu = 2
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -35,6 +35,16 @@ if !exists('g:shymenu_wildcharm')
         echoerr 'Please set g:shymenu_wildcharm. ShyMenu was not loaded'
         finish
     endif
+endif
+
+if !exists('g:shymenu_modes')
+    " A string that defines the modes for which the maps should be 
+    " defined. On international keyboards, the alt-maps could conflict 
+    " with special characters, which is why insert mode maps are 
+    " disabled by default:
+    "   n ... normal mode
+    "   i ... insert mode
+    let g:shymenu_modes = 'n'   "{{{2
 endif
 
 if !exists('g:shymenu_winpos_fullscreen')
@@ -81,6 +91,8 @@ function! s:ShyMenuCollect() "{{{3
                 let name0 = substitute(ml[2], '&', '', 'g')
                 " TLogVAR key, name0
                 let s:shymenu_items[key] = name0
+            else
+                " TLogVAR key
             endif
         endif
     endfor
@@ -160,15 +172,23 @@ let s:ttogglemenu = 0
 function! s:ShyMenuInstall() "{{{3
     for [key, item] in items(s:shymenu_items)
         if g:shymenu_emenu
-            exec 'noremap <m-'. key .'> :emenu '. item .'.'. g:shymenu_wildcharm
-            exec 'inoremap <m-'. key .'> <c-o>:emenu '. item .'.'. g:shymenu_wildcharm
+            if g:shymenu_modes =~ 'n'
+                exec 'noremap <m-'. key .'> :emenu '. item .'.'. g:shymenu_wildcharm
+            endif
+            if g:shymenu_modes =~ 'i'
+                exec 'inoremap <m-'. key .'> <c-o>:emenu '. item .'.'. g:shymenu_wildcharm
+            endif
             let s:ttogglemenu = 0
             if g:shymenu_termalt
                 exec 'set <m-'.key.'>='.key
             endif
         else
-            exec 'noremap <silent> <m-'. key .'> :call ShyMenu(1)\|simalt '. key .'<cr>'
-            exec 'inoremap <silent> <m-'. key .'> <c-o>:call ShyMenu(1)\|simalt '. key .'<cr>'
+            if g:shymenu_modes =~ 'n'
+                exec 'noremap <silent> <m-'. key .'> :call ShyMenu(1)\|simalt '. key .'<cr>'
+            endif
+            if g:shymenu_modes =~ 'i'
+                exec 'inoremap <silent> <m-'. key .'> <c-o>:call ShyMenu(1)\|simalt '. key .'<cr>'
+            endif
             let s:ttogglemenu = 1
         endif
     endfor
@@ -185,4 +205,8 @@ finish
 CHANGES:
 0.1
 - Initial release
+
+0.2
+- g:shymenu_modes: Disable insert mode maps by default (conflict with 
+international characters)
 

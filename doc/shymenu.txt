@@ -42,6 +42,7 @@ Contents~
         g:shymenu_emenu ............... |g:shymenu_emenu|
         g:shymenu_termalt ............. |g:shymenu_termalt|
         g:shymenu_wildcharm ........... |g:shymenu_wildcharm|
+        g:shymenu_modes ............... |g:shymenu_modes|
         g:shymenu_winpos_fullscreen ... |g:shymenu_winpos_fullscreen|
         g:shymenu_items ............... |g:shymenu_items|
         g:shymenu_blacklist ........... |g:shymenu_blacklist|
@@ -64,6 +65,15 @@ g:shymenu_termalt              (default: !has('gui_running'))
                                                     *g:shymenu_wildcharm*
 g:shymenu_wildcharm            (default: '<c-t>')
     The value of |&wildcharm| as string.
+
+                                                    *g:shymenu_modes*
+g:shymenu_modes                (default: 'n')
+    A string that defines the modes for which the maps should be 
+    defined. On international keyboards, the alt-maps could conflict 
+    with special characters, which is why insert mode maps are 
+    disabled by default:
+      n ... normal mode
+      i ... insert mode
 
                                                     *g:shymenu_winpos_fullscreen*
 g:shymenu_winpos_fullscreen    (default: '-\d$')
