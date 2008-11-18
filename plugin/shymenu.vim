@@ -3,14 +3,14 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2008-11-12.
-" @Last Change: 2008-11-13.
-" @Revision:    95
+" @Last Change: 2008-11-18.
+" @Revision:    132
 " GetLatestVimScripts: 2437 0 shymenu.vim
 
 if &cp || exists("loaded_shymenu")
     finish
 endif
-let loaded_shymenu = 2
+let loaded_shymenu = 3
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -28,12 +28,13 @@ endif
 
 if !exists('g:shymenu_wildcharm')
     if &wildcharm == 0
-        " The value of |&wildcharm| as string.
+        " The value of 'wildcharm' as string.
         let g:shymenu_wildcharm = '<c-t>'   "{{{2
         exec 'set wildcharm='. g:shymenu_wildcharm
     elseif g:shymenu_emenu
-        echoerr 'Please set g:shymenu_wildcharm. ShyMenu was not loaded'
-        finish
+        let g:shymenu_wildcharm = nr2char(&wildcharm) "{{{2
+        " echoerr 'Please set g:shymenu_wildcharm. ShyMenu was not loaded'
+        " finish
     endif
 endif
 
@@ -55,7 +56,7 @@ endif
 
 if !exists('g:shymenu_items')
     " Custom menus (eg. buffer-local menus) that are not detected by 
-    " shemenu.
+    " shymenu.
     " Format: {KEY: NAME}
     let g:shymenu_items = {}  "{{{2
 endif
@@ -124,8 +125,17 @@ function! s:UninstallAutocmd() "{{{3
     autocmd! ShyMenu
 endf
 
+function! s:SetTopLine(lineno) "{{{3
+    if line('w0') != a:lineno
+        let pos = getpos('.')
+        exec 'keepjumps norm! '. a:lineno .'zt'
+        call setpos('.', pos)
+    endif
+endf
+
 function! s:SetMenu(mode) "{{{3
     if a:mode
+        let topline = line('w0') + g:shymenu_lines
         if !s:IsFullScreen()
             let &lines -= g:shymenu_lines
         endif
@@ -133,6 +143,7 @@ function! s:SetMenu(mode) "{{{3
         let s:show_menu = 1
         call s:InstallAutocmd()
     else
+        let topline = line('w0') - g:shymenu_lines
         set guioptions-=m
         if !s:IsFullScreen()
             let &lines += g:shymenu_lines
@@ -140,6 +151,7 @@ function! s:SetMenu(mode) "{{{3
         let s:show_menu = 0
         call s:UninstallAutocmd()
     endif
+    call s:SetTopLine(topline)
     redraw
 endf
 
@@ -209,4 +221,9 @@ CHANGES:
 0.2
 - g:shymenu_modes: Disable insert mode maps by default (conflict with 
 international characters)
+
+0.3
+- Typos (thanks AS Budden)
+- Correct line offset if necessary
+- Set g:shymenu_wildcharm from &wildcharm
 

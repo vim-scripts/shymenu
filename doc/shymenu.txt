@@ -42,6 +42,7 @@ Contents~
         g:shymenu_emenu ............... |g:shymenu_emenu|
         g:shymenu_termalt ............. |g:shymenu_termalt|
         g:shymenu_wildcharm ........... |g:shymenu_wildcharm|
+        g:shymenu_wildcharm ........... |g:shymenu_wildcharm|
         g:shymenu_modes ............... |g:shymenu_modes|
         g:shymenu_winpos_fullscreen ... |g:shymenu_winpos_fullscreen|
         g:shymenu_items ............... |g:shymenu_items|
@@ -64,7 +65,10 @@ g:shymenu_termalt              (default: !has('gui_running'))
 
                                                     *g:shymenu_wildcharm*
 g:shymenu_wildcharm            (default: '<c-t>')
-    The value of |&wildcharm| as string.
+    The value of 'wildcharm' as string.
+
+                                                    *g:shymenu_wildcharm*
+g:shymenu_wildcharm            (default: nr2char(&wildcharm))
 
                                                     *g:shymenu_modes*
 g:shymenu_modes                (default: 'n')
@@ -83,7 +87,7 @@ g:shymenu_winpos_fullscreen    (default: '-\d$')
                                                     *g:shymenu_items*
 g:shymenu_items                (default: {})
     Custom menus (eg. buffer-local menus) that are not detected by 
-    shemenu.
+    shymenu.
     Format: {KEY: NAME}
 
                                                     *g:shymenu_blacklist*
